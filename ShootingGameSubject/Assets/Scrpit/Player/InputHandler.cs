@@ -35,8 +35,8 @@ public class InputHandler : MonoBehaviour
     }
     void GetInput()
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
         float c_h = Input.GetAxis("ControllerHorizontal");
         float c_v = Input.GetAxis("ControllerVertical");

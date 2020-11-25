@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
+    public BulletType bulletType;
     public float bulletSpeed;
     public float damage;
     private Transform m_transform;
@@ -17,8 +18,26 @@ public class EnemyBullet : MonoBehaviour
     }
     void FixedUpdate()
     {
-        rb.velocity = m_transform.up * bulletSpeed;
-        if(!m_spriteRenderer.isVisible)
-            ObjectPool.ReturnToPool(m_transform.gameObject);
+        switch(bulletType)
+        {
+            case BulletType.bullet:
+            {
+                rb.velocity = m_transform.up * bulletSpeed;
+                if(!m_spriteRenderer.isVisible)
+                    ObjectPool.ReturnToPool(m_transform.gameObject);
+                break;
+            }
+            case BulletType.laser:
+            {
+                break;
+            }
+        }
+        
+            
+        
+    }
+    public enum BulletType
+    {
+        bullet,laser
     }
 }

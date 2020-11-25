@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     public float dodgeSpeed;
     public float dodgeCD = 0.5f;
     public float shootingRate;
+    public bool invincible;
+    public float invincibleTime;
     public LayerMask wallLayer;
     private Vector3 dir;
     private InputHandler inputHandler;
@@ -25,7 +27,10 @@ public class Player : MonoBehaviour
     private float timeToFire ;
     private Transform m_transform;
     private float dodgeTimer;
+    private float invincibleTimer;
     private Rigidbody2D rb;
+    private SpriteRenderer m_spriteRenderer;
+    private Collider2D m_collider;
     private void Awake() 
     {
         if(instance ==null)
@@ -36,6 +41,8 @@ public class Player : MonoBehaviour
         m_transform = transform;
         inputHandler = m_transform.GetComponent<InputHandler>();
         rb = m_transform.GetComponent<Rigidbody2D>();
+        m_spriteRenderer = m_transform.GetComponent<SpriteRenderer>();
+        m_collider = m_transform.GetComponent<Collider2D>();
         currentHP = maxHP;
     }
     void FixedUpdate()
@@ -63,6 +70,13 @@ public class Player : MonoBehaviour
                 break;
             }
         }
+        invincibleTimer -=Time.deltaTime;
+        if(invincibleTimer <=0)
+        {
+            m_collider.isTrigger = false;
+            invincible = false;
+        }
+            
     }
 
     private void Move()
@@ -105,7 +119,7 @@ public class Player : MonoBehaviour
             
         Vector3 originScale = m_transform.localScale;
         m_transform.localScale = new Vector3(originScale.x*0.2f,originScale.y,originScale.z);
-        transform.DOScale(originScale,0.1f).SetEase(Ease.OutBack).OnComplete(()=>
+        transform.DOScale(originScale,0.2f).SetEase(Ease.OutBack).OnComplete(()=>
         {
             
         });
@@ -122,15 +136,52 @@ public class Player : MonoBehaviour
         timeToFire = Time.time + shootingRate;
 
     }
-    private void Damage()
+    private void Damage(Vector3 damagePos,float damage)
     {
+        if(state == State.dodge || state==State.damage || invincible)
+            return;
+        invincible = true;
+        invincibleTimer = invincibleTime;
+        m_collider.isTrigger = true;
+
         state = State.damage;
-        state = State.idle;
+        StartCoroutine(DamageEffect());
+        currentHP -= damage;
+        Vector3 damageDir = (transform.position - damagePos).normalized;
+        if(!Physics2D.Raycast(m_transform.position,damageDir,1f,wallLayer))
+        {
+            m_transform.DOMove(m_transform.position+damageDir,0.05f).OnComplete(()=>
+            {
+                state = State.idle;
+            });
+        }
+        else
+        {
+            RaycastHit2D hit2D = Physics2D.Raycast(m_transform.position,damageDir,1,wallLayer);
+            m_transform.DOMove(hit2D.point,0.05f).OnComplete(()=>
+            {
+                state = State.idle;
+            });
+        }
+    }
+    IEnumerator DamageEffect()
+    {
+        yield return new WaitForSeconds(0.1f);
+        m_spriteRenderer.color =new Color(1,1,1,0);
+        yield return new WaitForSeconds(0.1f);
+        m_spriteRenderer.color =new Color(1,1,1,1);
+        if(invincible)
+            StartCoroutine(DamageEffect());
+    }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag=="EnemyBullet")
+            Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
     }
     private void OnCollisionStay2D(Collision2D other)
     {
         if(other.gameObject.tag=="EnemyBullet")
-            Damage();
+            Damage(other.GetContact(0).point,other.transform.GetComponent<EnemyBullet>().damage);
     }
     public enum State
     {
