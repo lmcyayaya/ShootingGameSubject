@@ -178,6 +178,11 @@ public class Player : MonoBehaviour
         if(other.gameObject.tag=="EnemyBullet")
             Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
     }
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        if(other.gameObject.tag=="EnemyBullet")
+            Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
+    }
     private void OnCollisionStay2D(Collision2D other)
     {
         if(other.gameObject.tag=="EnemyBullet")

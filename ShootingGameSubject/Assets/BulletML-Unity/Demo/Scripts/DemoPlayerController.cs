@@ -31,8 +31,8 @@ namespace Pixelnest.BulletML.Demo
 
     void Update()
     {
-      float inputX = Input.GetAxis("Horizontal");
-      float inputY = Input.GetAxis("Vertical");
+      float inputX = Input.GetAxisRaw("Horizontal");
+      float inputY = Input.GetAxisRaw("Vertical");
 
       movement = new Vector2(
         inputX * speed,
@@ -44,7 +44,7 @@ namespace Pixelnest.BulletML.Demo
         Mathf.Clamp(movement.y, -maxSpeed, maxSpeed)
       );
 
-      bool shoot = Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3");
+      bool shoot =  Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3");
 
       if (shoot)
       {
