@@ -8,7 +8,7 @@ public class BossHPBar : MonoBehaviour
 {
     public Image black;
     public Image red;
-    private Enemy enemy;
+    private Boss boss;
     [HideInInspector]public float CurrentHP
     {
         get
@@ -25,19 +25,19 @@ public class BossHPBar : MonoBehaviour
         }
     }
     private float currentHP;
-    void Start()
+    private void Start()
     {
-        enemy = Enemy.Instance;
+        boss = Boss.Instance;
     }
-    void Update()
+    private void Update()
     {
-        CurrentHP = enemy.currentHP;
+        CurrentHP = boss.currentHP;
     }
     private void HPDoFillAmount()
     {
-        red.DOFillAmount(enemy.currentHP/enemy.maxHP,0.4f).SetEase(Ease.OutQuart).OnComplete(()=>
+        red.DOFillAmount(boss.currentHP/boss.maxHP,0.4f).SetEase(Ease.OutQuart).OnComplete(()=>
         {
-            black.DOFillAmount(enemy.currentHP/enemy.maxHP,0.3f).SetEase(Ease.OutQuart);
+            black.DOFillAmount(boss.currentHP/boss.maxHP,0.3f).SetEase(Ease.OutQuart);
         });
     }
 }

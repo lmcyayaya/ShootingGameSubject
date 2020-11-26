@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8368032945724492995}
   - component: {fileID: 1725996620286192777}
   - component: {fileID: 3753450914625410413}
-  - component: {fileID: 50853518167763770}
   m_Layer: 0
   m_Name: EnemyBullet
   m_TagString: EnemyBullet
@@ -110,27 +109,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c7740be79b19649bb6e45371690d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletType: 1
-  bulletSpeed: 10
-  damage: 5
---- !u!50 &50853518167763770
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7004585863623496939}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  bulletType: 0
+  damage: 10

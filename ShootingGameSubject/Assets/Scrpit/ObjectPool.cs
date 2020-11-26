@@ -44,7 +44,7 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-    public static Transform TakeFormPool(string pool)
+    public static Transform TakeFromPool(string pool)
     {
         Transform t = poolInfo[pool].Take();
         if(poolInfo[pool].inObj < 10)
@@ -59,6 +59,7 @@ public class ObjectPool : MonoBehaviour
     }
     public static IEnumerator ReturnToPool(GameObject obj,float t)
     {
+        Debug.Log(obj.name);
         yield return new WaitForSeconds(t);
         poolInfo[poolObjList[obj]].Return(obj);
         yield return null;

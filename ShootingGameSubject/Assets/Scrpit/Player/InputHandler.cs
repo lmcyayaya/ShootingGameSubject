@@ -23,17 +23,11 @@ public class InputHandler : MonoBehaviour
     private float smoothSpeed = 0.15f;
     private Vector3 mouse_pos;
     
-    void Update()
-    {
-        delta = Time.deltaTime;
-            
-    }
     private void FixedUpdate() 
     {
         GetInput();
-        UpdateStates();
     }
-    void GetInput()
+    private void GetInput()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -71,18 +65,15 @@ public class InputHandler : MonoBehaviour
 
         vertical = v;
         horizontal = h;
-
+        
+        R1Input();
         R2Input();
         FireInput();
         DodgeInput();
         XInput();
-    }
-    void UpdateStates()
-    {
-        R1Input();
         
     }
-    void XInput()
+    private void XInput()
     {
         if(Input.GetButton("X") && !XButtonDown)
         {
@@ -99,7 +90,7 @@ public class InputHandler : MonoBehaviour
             x_input = false;
         }
     }
-    void DodgeInput()
+    private void DodgeInput()
     {
         if(x_input || r1_input)
             dodge = true;
@@ -107,7 +98,7 @@ public class InputHandler : MonoBehaviour
             dodge = false;
 
     }
-    void FireInput()
+    private void FireInput()
     {
         if(r2_axis < 0 || Input.GetButton("Fire2"))
             fire = true;
@@ -115,7 +106,7 @@ public class InputHandler : MonoBehaviour
             fire =false;
         
     }
-    void R1Input()
+    private void R1Input()
     {
         if(Input.GetButton("R1") && !R1ButtonDown)
         {
@@ -132,7 +123,7 @@ public class InputHandler : MonoBehaviour
             r1_input = false;
         }
     }
-    void R2Input()
+    private void R2Input()
     {
         r2_axis = Input.GetAxisRaw("R2");
         if(r2_axis  <0 && !R2ButtonDown)

@@ -5,10 +5,10 @@ using DG.Tweening;
 using Pixelnest.BulletML;
 using System;
 
-public class Enemy : MonoBehaviour
+public class Boss : MonoBehaviour
 {
-    private static Enemy instance = null;
-    public static Enemy Instance
+    private static Boss instance = null;
+    public static Boss Instance
     {
         get {return instance;}
     }
@@ -19,20 +19,24 @@ public class Enemy : MonoBehaviour
     public BulletManagerScript bulletMLManager;
     public Transform laser;
     public Transform[] laserPoint;
-    private Transform m_transform;
-    private SpriteRenderer m_spritRrenderer;
+    private Transform m_Transform;
+    private SpriteRenderer m_SpriteRenderer;
+    private Color originColor;
     private Vector3 originScale;
+    private float tsunamiTimer;
     private void Awake() 
     {
         instance = this;
     }
-    void Start()
+    private void Start()
     {
-        m_transform = transform;
-        m_spritRrenderer = m_transform.GetComponent<SpriteRenderer>();
-        originScale = m_transform.localScale;
+        m_Transform = transform;
+        m_SpriteRenderer = m_Transform.GetComponent<SpriteRenderer>();
+        originScale = m_Transform.localScale;
+        originColor = m_SpriteRenderer.color;
         currentHP = maxHP;
-        StartCoroutine(WaitToDo(1,()=>state = State.idle));
+        StartCoroutine(WaitToDo(2,()=>state = State.idle));
+        
     }
     private void FixedUpdate() 
     {
@@ -83,40 +87,41 @@ public class Enemy : MonoBehaviour
     }
     private void Dead()
     {
-        transform.gameObject.SetActive(false);
+        m_Transform.gameObject.SetActive(false);
     }
     private void Laser()
     {
         state = State.attacking;
         int dir =UnityEngine.Random.Range(0,4);
-        m_transform.localScale = originScale;
+        m_Transform.localScale = originScale;
+
         switch(dir)
         {
             case 0:
             {
-                m_transform.position = laserPoint[0].position;
-                m_transform.rotation = laserPoint[0].rotation;
-                m_transform.DOMove(m_transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
+                m_Transform.position = laserPoint[0].position;
+                m_Transform.rotation = laserPoint[0].rotation;
+                m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
                 {
                     laser.DOScale(new Vector3(0.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1f,1f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>
                     {
                         laser.DOScale(new Vector3(1.5f,10,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            m_transform.DOMove(m_transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                            m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 if(!scendLevel)
                                     laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                     {
                                         laser.localScale = new Vector3(0,0,1);
-                                        m_transform.DOMove(m_transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                     });
                                 else
-                                    m_transform.DOMove(m_transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
-                                            m_transform.DOMove(m_transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                            m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
                                 
@@ -128,29 +133,29 @@ public class Enemy : MonoBehaviour
             }
             case 1:
             {
-                m_transform.position = laserPoint[1].position;
-                m_transform.rotation = laserPoint[1].rotation;
-                m_transform.DOMove(m_transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
+                m_Transform.position = laserPoint[1].position;
+                m_Transform.rotation = laserPoint[1].rotation;
+                m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
                 {
                     laser.DOScale(new Vector3(0.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1f,1f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>
                     {
                         laser.DOScale(new Vector3(1.5f,10,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            m_transform.DOMove(m_transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                            m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 if(!scendLevel)
                                     laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                     {
                                         laser.localScale = new Vector3(0,0,1);
-                                        m_transform.DOMove(m_transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                     });
                                 else
-                                    m_transform.DOMove(m_transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
-                                            m_transform.DOMove(m_transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                            m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
                                 
@@ -163,30 +168,30 @@ public class Enemy : MonoBehaviour
             }
             case 2:
             {
-                m_transform.position = laserPoint[2].position;
-                m_transform.rotation = laserPoint[2].rotation;
+                m_Transform.position = laserPoint[2].position;
+                m_Transform.rotation = laserPoint[2].rotation;
 
-                m_transform.DOMove(m_transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
+                m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
                 {
                     laser.DOScale(new Vector3(0.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1f,1f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>
                     {
                         laser.DOScale(new Vector3(1.5f,36,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            m_transform.DOMove(m_transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                            m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 if(!scendLevel)
                                     laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                     {
                                         laser.localScale = new Vector3(0,0,1);
-                                        m_transform.DOMove(m_transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                     });
                                 else
-                                    m_transform.DOMove(m_transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
-                                            m_transform.DOMove(m_transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                            m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
                                 
@@ -198,30 +203,30 @@ public class Enemy : MonoBehaviour
             }
             case 3:
             {
-                m_transform.position = laserPoint[3].position;
-                m_transform.rotation = laserPoint[3].rotation;
+                m_Transform.position = laserPoint[3].position;
+                m_Transform.rotation = laserPoint[3].rotation;
 
-                m_transform.DOMove(m_transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
+                m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.OutBack).OnComplete(()=>
                 {
                     laser.DOScale(new Vector3(0.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1f,1f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>laser.DOScale(new Vector3(1.5f,0.5f,1),0.3f).SetEase(Ease.OutBack).OnComplete(()=>
                     {
                         laser.DOScale(new Vector3(1.5f,36,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            m_transform.DOMove(m_transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                            m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 if(!scendLevel)
                                     laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                     {
                                         laser.localScale = new Vector3(0,0,1);
-                                        m_transform.DOMove(m_transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                     });
                                 else
-                                    m_transform.DOMove(m_transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
-                                            m_transform.DOMove(m_transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                            m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
                                 
@@ -237,18 +242,19 @@ public class Enemy : MonoBehaviour
     private void Tsunami()
     {
         state = State.attacking;
-        m_transform.position = new Vector3(0,1,0);
-        m_transform.rotation = Quaternion.Euler(0,0,0);
-        m_transform.localScale = new Vector3(0,0,1);
+        m_Transform.position = new Vector3(0,1,0);
+        m_Transform.rotation = Quaternion.Euler(0,0,0);
+        m_Transform.localScale = new Vector3(0,0,1);
         
-        m_transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
+        m_Transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
         {
-            m_transform.GetComponent<BulletSourceScript>().Initialize();
-            StartCoroutine(TsunamiEffect());
-            m_transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).SetDelay(4).OnComplete(()=>
+            m_Transform.GetComponent<BulletSourceScript>().Initialize();
+            // tsunamiTimer = 0;
+            // Coroutine tsunamiEffect =  StartCoroutine(TsunamiEffect());
+            m_Transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).SetDelay(4).OnComplete(()=>
             {
                 state = State.idle;
-                StopCoroutine(TsunamiEffect());
+                //StopCoroutine(tsunamiEffect);
             });
         });
     }
@@ -256,31 +262,30 @@ public class Enemy : MonoBehaviour
     {
         if(other.gameObject.tag !="Bullet")
             return;
-        
-        Damage(other.transform.GetComponent<Bullet>().damage);
-        ObjectPool.ReturnToPool(other.gameObject);
-    }
-    private void OnCollisionStay2D(Collision2D other) 
-    {
-        if(other.gameObject.tag !="Bullet")
-            return;
-        
-        Damage(other.transform.GetComponent<Bullet>().damage);
-        ObjectPool.ReturnToPool(other.gameObject);
 
+        Damage(other.transform.GetComponent<Bullet>().damage);
+        ObjectPool.ReturnToPool(other.gameObject);
+        StartCoroutine(HitEffect());
     }
     public enum State
     {
         idle,attacking,dead
     }
-    IEnumerator TsunamiEffect()
+    private IEnumerator TsunamiEffect()
     {
-        m_transform.Rotate(Vector3.forward*18);
-        yield return new WaitForSeconds(0.02f);
-        if(state == State.attacking)
+        m_Transform.Rotate(Vector3.forward*18);
+        tsunamiTimer+=Time.deltaTime;
+        yield return new WaitForSeconds(Time.deltaTime);
+        if(tsunamiTimer <3.7f)
             StartCoroutine(TsunamiEffect());
     }
-    IEnumerator WaitToDo(float time,Action action)
+    private IEnumerator HitEffect()
+    {
+        m_SpriteRenderer.color = new Color(originColor.r,originColor.g,originColor.b,0.7f);
+        yield return new WaitForSeconds(0.1f);
+        m_SpriteRenderer.color = originColor;
+    }
+    private IEnumerator WaitToDo(float time,Action action)
     {
         yield return new WaitForSeconds(time);
         action();

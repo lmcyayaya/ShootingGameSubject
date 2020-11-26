@@ -25,11 +25,11 @@ public class HPBar : MonoBehaviour
         }
     }
     private float currentHP;
-    void Start()
+    private void Start()
     {
         player = Player.Instance;
     }
-    void Update()
+    private void Update()
     {
         CurrentHP = player.currentHP;
     }
