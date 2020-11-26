@@ -26,7 +26,7 @@
 
  <wait>10 + 210 * $rank * $rank</wait>
 
- <fire>
+ <!-- <fire>
   <direction type="absolute">70 + 40 * $rand</direction>
   <speed>0.6 - 0.3 * $rank</speed>
   <bulletRef label="layer1"/>
@@ -36,10 +36,10 @@
   <speed>0.6 - 0.3 * $rank</speed>
   <bulletRef label="layer1"/>
  </fire>
- <wait>600</wait>
+ <wait>600</wait> -->
 </action>
 
-<bullet label="layer1">
+ <bullet label="layer1">
 <action>
  <wait>15</wait>
  <repeat> <times>100</times> <action>
@@ -94,6 +94,6 @@
   <wait>60</wait>
  </action> </repeat>
 
-</action> </bullet>
+</action> </bullet> 
 
 </bulletml>

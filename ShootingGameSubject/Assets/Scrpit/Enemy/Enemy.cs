@@ -9,16 +9,29 @@ public class Enemy : MonoBehaviour
 {
     public float maxHP;
     public float currentHP;
-    
+    public LayerMask wallLayer;
+    public Color hitColor;
+    protected bool acting;
     protected Transform m_Transform;
     protected SpriteRenderer m_SpriteRenderer;
     private Color originColor;
-    protected void Start()
+    protected void Awake()
     {
         m_Transform = transform;
         m_SpriteRenderer = m_Transform.GetComponent<SpriteRenderer>();
         originColor = m_SpriteRenderer.color;
         currentHP = maxHP;
+    }
+    private void OnEnable() 
+    {
+        acting = true;
+        m_SpriteRenderer.color = originColor;
+        currentHP = maxHP;
+        StartCoroutine(WaitToDo(0.8f,()=> acting = false));
+    }
+    private void OnDisable() 
+    {
+        StopAllCoroutines();
     }
     private void Damage(float damage)
     {
@@ -30,20 +43,29 @@ public class Enemy : MonoBehaviour
     }
     private void Dead()
     {
-        m_Transform.gameObject.SetActive(false);
+        currentHP = maxHP;
+        Boss.Instance.destoryEnemy +=1;
+        ObjectPool.ReturnToPool(m_Transform.gameObject);
+        //m_Transform.gameObject.SetActive(false);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(!other.gameObject.CompareTag("Bullet"))
             return;
+        StartCoroutine(HitEffect());
         Damage(other.transform.GetComponent<Bullet>().damage);
         ObjectPool.ReturnToPool(other.gameObject);
-        StartCoroutine(HitEffect());
+        
     }
     private IEnumerator HitEffect()
     {
-        m_SpriteRenderer.color = new Color(originColor.r,originColor.g,originColor.b,0.7f);
+        m_SpriteRenderer.color = hitColor;
         yield return new WaitForSeconds(0.1f);
         m_SpriteRenderer.color = originColor;
+    }
+    protected IEnumerator WaitToDo(float time,Action action)
+    {
+        yield return new WaitForSeconds(time);
+        action();
     }
 }

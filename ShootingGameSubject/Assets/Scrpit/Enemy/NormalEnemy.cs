@@ -7,8 +7,6 @@ public class NormalEnemy : Enemy
     public float moveLength = 3;
     public float fireRate;
     public int bulletQuantity;
-    public LayerMask wallLayer;
-    private bool acting;
     private Vector3 moveDir;
     private int currentBulletQuantity;
     private Quaternion shootQuaternion;

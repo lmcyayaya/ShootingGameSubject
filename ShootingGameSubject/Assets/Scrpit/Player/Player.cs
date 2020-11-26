@@ -146,6 +146,7 @@ public class Player : MonoBehaviour
 
         state = State.damage;
         StartCoroutine(DamageEffect());
+        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.4f,0.05f,1.5f));
         currentHP -= damage;
         Vector3 damageDir = (transform.position - damagePos).normalized;
         if(!Physics2D.Raycast(m_Transform.position,damageDir,1f,wallLayer))
@@ -175,21 +176,18 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D other)
     {
-        if(!other.gameObject.CompareTag("EnemyBullet"))
-            return;
-        Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
+        if(other.gameObject.CompareTag("EnemyBullet")||other.gameObject.CompareTag("Enemy"))
+            Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
     }
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        if(!other.gameObject.CompareTag("EnemyBullet"))
-            return;
-        Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
+        if(other.gameObject.CompareTag("EnemyBullet")||other.gameObject.CompareTag("Enemy"))
+            Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
     }
     private void OnCollisionStay2D(Collision2D other)
     {
-        if(!other.gameObject.CompareTag("EnemyBullet"))
-            return;
-        Damage(other.GetContact(0).point,other.transform.GetComponent<EnemyBullet>().damage);
+        if(other.gameObject.CompareTag("EnemyBullet")||other.gameObject.CompareTag("Enemy"))
+            Damage(other.transform.position,other.transform.GetComponent<EnemyBullet>().damage);
     }
     public enum State
     {
