@@ -15,25 +15,26 @@ public class Boss : MonoBehaviour
     public State state;
     public float maxHP;
     public float currentHP;
+    public float scendLevelLine;
     public bool scendLevel;
     public BulletManagerScript bulletMLManager;
     public Transform laser;
     public Transform[] laserPoint;
     public Transform[] openingPoint;
+    public Transform[] rightWaves;
+    public Transform[] leftWaves;
     public Transform shield;
     public Color hitColor;
-    public int destoryEnemy;
+    [HideInInspector]public int destoryEnemy;
     private Transform m_Transform;
-    private bool checkEnemy;
     private SpriteRenderer m_SpriteRenderer;
     private Color originColor;
     private Vector3 originScale;
+    private bool checkEnemy;
     private bool tsunamiEnd;
+    private bool waveEnd;
     private List<Action> attackList = new List<Action>();
     private Action lastAttack;
-    private Action attackLaser;
-    private Action attackTsunami;
-    private Action attackCallEnemy;
     private int attackTimes;
     private void Awake() 
     {
@@ -46,12 +47,10 @@ public class Boss : MonoBehaviour
         originScale = m_Transform.localScale;
         originColor = m_SpriteRenderer.color;
         currentHP = maxHP;
-        attackLaser = Laser;
-        attackTsunami = Tsunami;
-        attackCallEnemy = CallEnemy;
-        attackList.Add(attackLaser);
-        attackList.Add(attackTsunami);
-        attackList.Add(attackCallEnemy);
+        attackList.Add(Laser);
+        attackList.Add(Laser);
+        attackList.Add(Tsunami);
+        attackList.Add(CallEnemy);
         m_Transform.localScale = new Vector3(0,0,1);
         StartCoroutine(WaitToDo(3,()=>
         {
@@ -78,8 +77,15 @@ public class Boss : MonoBehaviour
                 break;
             }
         }
-        if(currentHP < maxHP/2)
+        if(currentHP < maxHP*scendLevelLine/100)
+        {
             scendLevel = true;
+            if(!attackList.Contains(Wave))
+            {
+                attackList.Add(Wave);
+            }
+        }
+            
         if(scendLevel)
         {
             bulletMLManager.timeSpeed = 2;
@@ -100,7 +106,7 @@ public class Boss : MonoBehaviour
             }
             else
             {
-                if(destoryEnemy >= 2)
+                if(destoryEnemy >= 1)
                 {
                     destoryEnemy = 0;
                     m_Transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).OnComplete(()=>
@@ -114,6 +120,7 @@ public class Boss : MonoBehaviour
         else
         {
             if(checkEnemy)
+            {
                 if(destoryEnemy >= 6)
                 {
                     destoryEnemy = 0;
@@ -123,9 +130,10 @@ public class Boss : MonoBehaviour
                         state = State.idle;
                     });
                 }
+            }
             else
             {
-                if(destoryEnemy >= 3)
+                if(destoryEnemy >= 2)
                 {
                     destoryEnemy = 0;
                     m_Transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).OnComplete(()=>
@@ -155,7 +163,7 @@ public class Boss : MonoBehaviour
     {
         attackTimes+=1;
         int attackIndex = UnityEngine.Random.Range(0,attackList.Count);
-        while (attackList[attackIndex]==lastAttack && attackList[attackIndex]!=Laser|| attackTimes < 5 && attackList[attackIndex]==CallEnemy)
+        while (attackList[attackIndex]==lastAttack && attackList[attackIndex]!=Laser|| attackTimes < 3 && attackList[attackIndex]==CallEnemy)
         {
             attackIndex = UnityEngine.Random.Range(0,attackList.Count);
         }
@@ -182,22 +190,24 @@ public class Boss : MonoBehaviour
                         {
                             m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
-                                if(!scendLevel)
-                                    laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
-                                    {
-                                        laser.localScale = new Vector3(0,0,1);
-                                        m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
-                                    });
-                                else
+                                StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
+                                if(scendLevel)
                                     m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
+                                        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
                                             m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
-                                
+                                else
+                                    laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
+                                    {
+                                        laser.localScale = new Vector3(0,0,1);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.up*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                    });
+                                    
                             });
                         });
                     })));
@@ -216,22 +226,23 @@ public class Boss : MonoBehaviour
                         {
                             m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
-                                if(!scendLevel)
-                                    laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
-                                    {
-                                        laser.localScale = new Vector3(0,0,1);
-                                        m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
-                                    });
-                                else
+                                StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
+                                if(scendLevel)
                                     m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
+                                        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
                                             m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
-                                
+                                else  
+                                    laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
+                                    {
+                                        laser.localScale = new Vector3(0,0,1);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.down*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                    });
                             });
                         });
                     })));
@@ -252,22 +263,23 @@ public class Boss : MonoBehaviour
                         {
                             m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
-                                if(!scendLevel)
-                                    laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
+                                StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
+                                if(scendLevel)
+                                   m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
-                                        laser.localScale = new Vector3(0,0,1);
-                                        m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
-                                    });
-                                else
-                                    m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
-                                    {
+                                        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
                                             m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
                                     });
-                                
+                                else
+                                    laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
+                                    {
+                                        laser.localScale = new Vector3(0,0,1);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.left*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
+                                    });
                             });
                         });
                     })));
@@ -287,20 +299,22 @@ public class Boss : MonoBehaviour
                         {
                             m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
-                                if(!scendLevel)
-                                    laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
-                                    {
-                                        laser.localScale = new Vector3(0,0,1);
-                                        m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
-                                    });
-                                else
+                                StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
+                                if(scendLevel)
                                     m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
+                                        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
                                         {
                                             laser.localScale = new Vector3(0,0,1);
                                             m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                         });
+                                    });
+                                else
+                                    laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
+                                    {
+                                        laser.localScale = new Vector3(0,0,1);
+                                        m_Transform.DOMove(m_Transform.position+Vector3.right*1.2f,0.5f).SetEase(Ease.InBack).OnComplete(()=> state = State.idle);
                                     });
                                 
                             });
@@ -363,16 +377,43 @@ public class Boss : MonoBehaviour
                 case 1:
                     checkEnemy = false;
                     if(scendLevel)
-                        StartCoroutine(SpawnEnemy("DashEnemy",3,-m_Transform.up));
-                    else
                         StartCoroutine(SpawnEnemy("DashEnemy",2,-m_Transform.up));
+                    else
+                        StartCoroutine(SpawnEnemy("DashEnemy",1,-m_Transform.up));
                     break;
 
             }
         });
         
     }
+    private void Wave()
+    {
+        state = State.attacking;
+        lastAttack = Wave;
+        m_Transform.position = new Vector3(0,1,0);
+        m_Transform.rotation = Quaternion.Euler(0,0,0);
+        m_Transform.localScale = new Vector3(0,0,1);
+        m_Transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
+        {
+            m_Transform.DOMove(new Vector3(0,4.5f,0),0.5f).SetEase(Ease.OutQuart).OnComplete(()=>
+            {
+                m_Transform.DOMove(new Vector3(0,-3.6f,0),0.2f).SetEase(Ease.InQuart).OnComplete(()=>
+                {
+                    StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.6f,0.05f,0.15f));
+                    StartCoroutine(WaveAttack(rightWaves,0,()=>
+                    {
+                        m_Transform.DOMove(m_Transform.position-Vector3.up*1.2f,0.3f).SetEase(Ease.InBack).OnComplete(()=>
+                        {
+                            state = State.idle;
+                        });
+                    }));
+                    StartCoroutine(WaveAttack(leftWaves,0,null));
 
+                });
+            });
+        });
+
+    }
     private void OnTriggerStay2D(Collider2D other)
     {
         if(!other.gameObject.CompareTag("Bullet"))
@@ -402,9 +443,6 @@ public class Boss : MonoBehaviour
             StartCoroutine(SpawnEnemy(target,quantity-1,Quaternion.Euler(0,0,-120)*dir));
         else
             shield.SetParent(m_Transform);
-            
-            
-
     }
     private IEnumerator TsunamiEffect()
     {
@@ -416,6 +454,27 @@ public class Boss : MonoBehaviour
         m_Transform.Rotate(Vector3.forward*18);
         yield return new WaitForSeconds(Time.deltaTime);
             StartCoroutine(TsunamiEffect());
+    }
+    private IEnumerator WaveAttack(Transform[] waves,int index,Action action)
+    {
+        waves[index].DOScale(new Vector3(0.5f,4.5f,1),0.3f).SetEase(Ease.OutQuart).OnComplete(()=>
+        {
+            waves[index].DOScale(new Vector3(0.5f,0,1),0.3f).SetEase(Ease.InQuart).OnComplete(()=>
+            {
+                if(index==waves.Length-1)
+                {
+                    if(action!=null)
+                        action();
+                }
+            });
+        });
+        yield return new WaitForSeconds(0.1f);
+            if(index < waves.Length)
+            {
+                StartCoroutine(WaveAttack(waves,index+1,action));
+            }
+            else
+                yield break;
     }
     private IEnumerator HitEffect()
     {
