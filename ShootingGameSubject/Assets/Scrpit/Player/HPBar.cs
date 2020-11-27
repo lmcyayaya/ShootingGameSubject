@@ -27,6 +27,7 @@ public class HPBar : MonoBehaviour
     private float currentHP;
     private void Start()
     {
+        transform.DOScale(Vector3.one,1f);
         player = Player.Instance;
     }
     private void Update()

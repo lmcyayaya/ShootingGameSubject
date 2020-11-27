@@ -6,7 +6,7 @@ public class ParticleReturnToPool : MonoBehaviour
 {
     ParticleSystem ps;
     float t;
-    void Start()
+    private void Awake()
     {
         GetParticleSystem();
     }

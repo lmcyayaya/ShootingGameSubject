@@ -20,6 +20,7 @@ public class DashEnemy : Enemy
             return;
 
         attackDir = (Player.Instance.m_Transform.position-m_Transform.position).normalized;
+        attackDir.z = 0;
         m_Transform.up = attackDir;
         effect.localScale = new Vector3(xScale,Vector3.Distance(Player.Instance.m_Transform.position+attackDir*3,m_Transform.position)*5,1);  
         if(aiming)

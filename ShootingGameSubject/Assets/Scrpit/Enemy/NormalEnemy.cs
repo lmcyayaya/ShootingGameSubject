@@ -21,6 +21,7 @@ public class NormalEnemy : Enemy
             return;
         acting = true;
         moveDir =(Player.Instance.m_Transform.position-m_Transform.position).normalized;
+        moveDir.z = 0;
         int i = Random.Range(0,5);
         if(i == 0)
             moveDir = Quaternion.Euler(0,0,90)*moveDir;
@@ -50,6 +51,7 @@ public class NormalEnemy : Enemy
     {
         currentBulletQuantity = bulletQuantity;
         Vector3 shootDir = (Player.Instance.m_Transform.position-m_Transform.position).normalized;
+        shootDir.z = 0;
         if(Random.Range(0,2)==0)
             shootQuaternion = Quaternion.Euler(0,0,10);
         else

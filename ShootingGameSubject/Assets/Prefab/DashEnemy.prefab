@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046312bedcdabb448a5c4fc44fb2d0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 50
+  maxHP: 25
   currentHP: 0
   wallLayer:
     serializedVersion: 2

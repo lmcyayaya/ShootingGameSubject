@@ -59,7 +59,6 @@ public class ObjectPool : MonoBehaviour
     }
     public static IEnumerator ReturnToPool(GameObject obj,float t)
     {
-        Debug.Log(obj.name);
         yield return new WaitForSeconds(t);
         poolInfo[poolObjList[obj]].Return(obj);
         yield return null;

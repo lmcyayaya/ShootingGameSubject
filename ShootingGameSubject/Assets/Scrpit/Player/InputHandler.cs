@@ -20,7 +20,6 @@ public class InputHandler : MonoBehaviour
     private bool XButtonDown;
     private bool R1ButtonDown;
     private bool R2ButtonDown;
-    private float smoothSpeed = 0.15f;
     private Vector3 mouse_pos;
     
     private void FixedUpdate() 
@@ -43,11 +42,6 @@ public class InputHandler : MonoBehaviour
         {
             h = c_h;
             v = c_v;
-            smoothSpeed = 0.15f;
-        }
-        else
-        {
-            smoothSpeed = 0.05f;
         }
 
         if(rc_h!=0 || rc_v!=0)
@@ -61,6 +55,7 @@ public class InputHandler : MonoBehaviour
         {
             mouse_pos = Input.mousePosition;
             lookDir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+            lookDir = new Vector3(lookDir.x,lookDir.y,0);
         }
 
         vertical = v;

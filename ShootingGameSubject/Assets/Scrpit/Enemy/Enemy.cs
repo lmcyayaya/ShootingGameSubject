@@ -45,6 +45,9 @@ public class Enemy : MonoBehaviour
     {
         currentHP = maxHP;
         Boss.Instance.destoryEnemy +=1;
+        Transform deadParticle = ObjectPool.TakeFromPool("DeadParticle");
+        deadParticle.position = m_Transform.position;
+        
         ObjectPool.ReturnToPool(m_Transform.gameObject);
         //m_Transform.gameObject.SetActive(false);
     }

@@ -12,13 +12,15 @@ using UnityEngine;
         public float duration = 0.05f;
         public float slowDownAmount = 1.5f;
         public Transform cam;
-
-        Vector3 orginPos;
+        private Vector3 oriPos;
+        private Vector3 orginPos;
         float initiaDuration = 0.2f;
         void Start()
         {
             instance = this;
             cam = Camera.main.transform;
+            oriPos = cam.transform.localPosition;
+
         }
         public IEnumerator CameraShakeOneShot(float p,float dur,float sDAmount)
         {
@@ -38,7 +40,7 @@ using UnityEngine;
         }
         public void ResetCamera()
         {
-            cam.transform.localPosition = orginPos;
+            cam.transform.localPosition = oriPos;
         }
         public IEnumerator CameraShakeTest()
         {

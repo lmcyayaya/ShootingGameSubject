@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     public bool invincible;
     public float invincibleTime;
     public LayerMask wallLayer;
+    public ParticleSystem deadParticle;
+    public GameObject gameOver;
+    public GameObject canvas;
     private InputHandler inputHandler;
     private Vector3 dir;
     private Vector3 moveDir;
@@ -69,6 +72,10 @@ public class Player : MonoBehaviour
                 Dodge();
                 break;
             }
+            case State.dead:
+            {
+                break;
+            }
         }
         invincibleTimer -=Time.deltaTime;
         if(invincibleTimer <=0)
@@ -77,6 +84,11 @@ public class Player : MonoBehaviour
             invincible = false;
         }
             
+
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Dead();
+        }
     }
 
     private void Move()
@@ -136,10 +148,44 @@ public class Player : MonoBehaviour
         timeToFire = Time.time + shootingRate;
 
     }
+    private void Dead()
+    {
+
+        invincible = true;
+        invincibleTimer = invincibleTime;
+        m_Collider.isTrigger = true;
+        state = State.dead;
+        m_Rb.velocity = Vector3.zero;
+        canvas.SetActive(false);
+
+        StartCoroutine(DamageEffect());
+
+        Time.timeScale = 0.2f;
+        StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.3f,0.6f,0.15f));
+        Camera.main.transform.parent.DOMove(new Vector3(m_Transform.position.x,m_Transform.position.y,-10),0.6f).OnComplete(()=>
+        {
+            Time.timeScale = 1;
+            deadParticle.transform.SetParent(null);
+            deadParticle.gameObject.SetActive(true);
+            deadParticle.Play();
+            gameOver.SetActive(true);
+            m_Transform.gameObject.SetActive(false);
+            
+        });
+        Camera.main.DOOrthoSize(1.5f,0.6f);
+        
+    }
     private void Damage(Vector3 damagePos,float damage)
     {
         if(state == State.dodge || state==State.damage || invincible)
             return;
+
+        if(currentHP-damage<=0)
+        {
+            Dead();
+            return;
+        }
+
         invincible = true;
         invincibleTimer = invincibleTime;
         m_Collider.isTrigger = true;
@@ -191,6 +237,6 @@ public class Player : MonoBehaviour
     }
     public enum State
     {
-        idle,dodge,damage
+        idle,dodge,damage,dead
     }
 }
