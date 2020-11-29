@@ -11,7 +11,6 @@ public class StartCutIn : MonoBehaviour
     public Transform backGround;
     public Image transitionsTop;
     public Image transitionsDown;
-    public bool levelup;
     private void Start()
     {
         transitionsTop.DOFillAmount(0,0.3f);
@@ -26,8 +25,6 @@ public class StartCutIn : MonoBehaviour
                 {
                     transform.DOMove(cutOut.position,0.2f).SetEase(Ease.OutQuart).OnComplete(()=>
                     {
-                        if(levelup)
-                            Boss.Instance.scendLevel = true;
                     });
                 });
             });

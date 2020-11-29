@@ -28,7 +28,7 @@ public class Boss : MonoBehaviour
     public Transform[] leftWaves;
     public Transform shield;
     public Color hitColor;
-    [HideInInspector]public int destoryEnemy;
+    public int destoryEnemy;
     private Transform m_Transform;
     private SpriteRenderer m_SpriteRenderer;
     private Color originColor;
@@ -154,6 +154,7 @@ public class Boss : MonoBehaviour
         else if(currentHP < maxHP*scendLevelLine/100 && !scendLevel)
         {
             state = State.attacking;
+            scendLevel = true;
         }
         
     }
@@ -394,9 +395,9 @@ public class Boss : MonoBehaviour
         m_Transform.localScale = new Vector3(0,0,1);
         m_Transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
         {
-            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.5f).SetEase(Ease.OutQuart).OnComplete(()=>
+            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.6f).SetEase(Ease.OutQuart).OnComplete(()=>
             {
-                currentTween = m_Transform.DOMove(new Vector3(0,-3.6f,0),0.2f).SetEase(Ease.InQuart).OnComplete(()=>
+                currentTween = m_Transform.DOMove(new Vector3(0,-3.6f,0),0.3f).SetEase(Ease.InQuart).OnComplete(()=>
                 {
                     StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.05f,0.15f));
                     StartCoroutine(WaveAttack(rightWaves,0,()=>
@@ -507,9 +508,7 @@ public class Boss : MonoBehaviour
         });
         yield return new WaitForSeconds(0.1f);
             if(index+1 < waves.Length)
-            {
                 StartCoroutine(WaveAttack(waves,index+1,action));
-            }
             else
                 yield break;
     }

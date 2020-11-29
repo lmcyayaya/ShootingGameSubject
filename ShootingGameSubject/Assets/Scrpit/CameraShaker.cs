@@ -14,7 +14,7 @@ using UnityEngine;
         public Transform cam;
         private Vector3 oriPos;
         private Vector3 orginPos;
-        float initiaDuration = 0.2f;
+        private float initiaDuration = 0.2f;
         void Start()
         {
             instance = this;
@@ -32,14 +32,16 @@ using UnityEngine;
                 yield return null;
             }
             cam.transform.localPosition = orginPos;
+            StartCoroutine(ResetCamera());
         }
         public void CameraKeepShake(float p)
         {
             orginPos = cam.transform.localPosition;
             cam.localPosition = orginPos +Random.insideUnitSphere * p;
         }
-        public void ResetCamera()
+        public IEnumerator ResetCamera()
         {
+            yield return new WaitForSeconds(Time.deltaTime);
             cam.transform.localPosition = oriPos;
         }
         public IEnumerator CameraShakeTest()

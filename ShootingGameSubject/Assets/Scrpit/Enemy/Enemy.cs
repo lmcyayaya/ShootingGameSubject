@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
     {
         if(!other.gameObject.CompareTag("Bullet"))
             return;
+            
         StartCoroutine(HitEffect());
         Damage(other.transform.GetComponent<Bullet>().damage);
         ObjectPool.ReturnToPool(other.gameObject);
