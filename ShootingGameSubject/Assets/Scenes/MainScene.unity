@@ -19295,7 +19295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2009048343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19656,7 +19656,7 @@ MonoBehaviour:
   state: 1
   maxHP: 2000
   currentHP: 2000
-  scendLevelLine: 40
+  scendLevelLine: 50
   scendLevel: 0
   bulletMLManager: {fileID: 1233095811}
   deadParticle: {fileID: 1918809345}
