@@ -2974,10 +2974,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -3540,7 +3540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063593024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: -0.98, z: 0}
+  m_LocalPosition: {x: 0.02, y: -3.2, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_Children:
   - {fileID: 1363350956}
@@ -19295,7 +19295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2009048343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19656,7 +19656,7 @@ MonoBehaviour:
   state: 1
   maxHP: 2000
   currentHP: 2000
-  scendLevelLine: 50
+  scendLevelLine: 40
   scendLevel: 0
   bulletMLManager: {fileID: 1233095811}
   deadParticle: {fileID: 1918809345}
@@ -19746,7 +19746,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057102609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.61, y: 2.07, z: 0}
+  m_LocalPosition: {x: 23.32, y: 0.92, z: 0}
   m_LocalScale: {x: 0.49999994, y: 0.49999994, z: 0.5}
   m_Children:
   - {fileID: 1918809343}

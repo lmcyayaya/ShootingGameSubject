@@ -395,7 +395,7 @@ public class Boss : MonoBehaviour
         m_Transform.localScale = new Vector3(0,0,1);
         m_Transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
         {
-            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.6f).SetEase(Ease.OutQuart).OnComplete(()=>
+            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.8f).SetEase(Ease.OutQuart).OnComplete(()=>
             {
                 currentTween = m_Transform.DOMove(new Vector3(0,-3.6f,0),0.3f).SetEase(Ease.InQuart).OnComplete(()=>
                 {
