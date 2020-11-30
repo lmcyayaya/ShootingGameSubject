@@ -88,7 +88,7 @@ public class Boss : MonoBehaviour
         {
             if(checkEnemy)
             {
-                if(destoryEnemy >= 2)
+                if(destoryEnemy >= 3)
                 {
                     destoryEnemy = 0;
                     m_Transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).OnComplete(()=>
@@ -115,7 +115,7 @@ public class Boss : MonoBehaviour
         {
             if(checkEnemy)
             {
-                if(destoryEnemy >= 3)
+                if(destoryEnemy >= 6)
                 {
                     destoryEnemy = 0;
                     m_Transform.DOScale(new Vector3(0,0,1),0.3f).SetEase(Ease.InBack).OnComplete(()=>
@@ -188,11 +188,11 @@ public class Boss : MonoBehaviour
                     {
                         laser.DOScale(new Vector3(1.5f,10,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                 if(scendLevel)
-                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
@@ -224,11 +224,11 @@ public class Boss : MonoBehaviour
                     {
                         laser.DOScale(new Vector3(1.5f,10,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.right*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                 if(scendLevel)
-                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.left*16.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,10,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
@@ -261,11 +261,11 @@ public class Boss : MonoBehaviour
                     {
                         laser.DOScale(new Vector3(1.5f,36,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                 if(scendLevel)
-                                   currentTween = m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                                   currentTween = m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
@@ -297,11 +297,11 @@ public class Boss : MonoBehaviour
                     {
                         laser.DOScale(new Vector3(1.5f,36,1),0.3f).SetEase(Ease.InExpo).OnComplete(()=>
                         {
-                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                            currentTween = m_Transform.DOMove(m_Transform.position+Vector3.up*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                             {
                                 StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                 if(scendLevel)
-                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.7f).SetEase(Ease.InQuart).OnComplete(()=>
+                                    currentTween = m_Transform.DOMove(m_Transform.position+Vector3.down*8.5f,0.5f).SetEase(Ease.InQuart).OnComplete(()=>
                                     {
                                         StartCoroutine(CameraShaker.Instance.CameraShakeOneShot(0.5f,0.03f,0.15f));
                                         laser.DOScale(new Vector3(0,36,1),1f).SetEase(Ease.OutQuart).OnComplete(()=>
@@ -370,9 +370,9 @@ public class Boss : MonoBehaviour
                 case 0:
                     checkEnemy = true;
                     if(scendLevel)
-                        StartCoroutine(SpawnEnemy("NormalEnemy",3,-m_Transform.up));
+                        StartCoroutine(SpawnEnemy("NormalEnemy",6,-m_Transform.up));
                     else
-                        StartCoroutine(SpawnEnemy("NormalEnemy",2,-m_Transform.up));
+                        StartCoroutine(SpawnEnemy("NormalEnemy",3,-m_Transform.up));
                     break;
                 case 1:
                     checkEnemy = false;
@@ -395,7 +395,7 @@ public class Boss : MonoBehaviour
         m_Transform.localScale = new Vector3(0,0,1);
         m_Transform.DOScale(originScale,0.3f).SetEase(Ease.OutBack).OnComplete(()=>
         {
-            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.8f).SetEase(Ease.OutQuart).OnComplete(()=>
+            currentTween = m_Transform.DOMove(new Vector3(0,4.5f,0),0.6f).SetEase(Ease.OutQuart).OnComplete(()=>
             {
                 currentTween = m_Transform.DOMove(new Vector3(0,-3.6f,0),0.3f).SetEase(Ease.InQuart).OnComplete(()=>
                 {
