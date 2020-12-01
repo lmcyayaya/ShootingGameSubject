@@ -29,4 +29,33 @@ public class ButtonFunction : MonoBehaviour
         transitionsTop.DOFillAmount(0.5f,0.3f).OnComplete(()=>SceneManager.LoadScene(0));
         transitionsDown.DOFillAmount(0.5f,0.3f);
     }
+    public void ForHard()
+    {
+        Title.Instance.AllFade(()=>
+        {
+            Boss.Instance.laserTime = 0.5f;
+            Boss.Instance.waveTime = 0.6f;
+            Boss.Instance.normalEnemy = 3;
+            Boss.Instance.dashEnemy = 1;
+            Boss.Instance.scendLevelNormalEnemy = 6;
+            Boss.Instance.scendLevelDashEnemy = 2;
+        });
+        
+        
+    }
+    public void ForNormal()
+    {
+        Title.Instance.AllFade(()=>
+        {
+            Boss.Instance.laserTime = 0.7f;
+            Boss.Instance.waveTime = 0.75f;
+            Boss.Instance.normalEnemy = 2;
+            Boss.Instance.dashEnemy = 1;
+            Boss.Instance.scendLevelNormalEnemy = 4;
+            Boss.Instance.scendLevelDashEnemy = 1;
+        });
+        
+        
+    }
+
 }

@@ -20,6 +20,7 @@ public class InputHandler : MonoBehaviour
     private bool XButtonDown;
     private bool R1ButtonDown;
     private bool R2ButtonDown;
+    private bool mouseControl;
     private Vector3 mouse_pos;
     
     private void FixedUpdate() 
@@ -46,13 +47,14 @@ public class InputHandler : MonoBehaviour
 
         if(rc_h!=0 || rc_v!=0)
         {
-            
+            mouseControl = false;
             r_horizontal = rc_h;
             r_vertical = rc_v;
             lookDir = new Vector3(rc_h,rc_v,0);
         }
-        else if(mouse_pos!=Input.mousePosition)
+        else if(mouse_pos!=Input.mousePosition || mouseControl)
         {
+            mouseControl = true;
             mouse_pos = Input.mousePosition;
             lookDir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
             lookDir = new Vector3(lookDir.x,lookDir.y,0);
